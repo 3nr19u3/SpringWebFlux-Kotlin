@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Title</title>
+</head>
+    <body>
+    <div th:if="${param.error != null}" th:text="${param.error}"></div>
+    <div th:if="${param.success != null}" th:text="${param.success}"></div>
+    <h1 th:text="${title}"></h1>
+    <a th:href="@{/form}">Create</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                    <th>price</th>
+                    <th>date</th>
+                    <th>category</th>
+                    <th>edit</th>
+                    <th>delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="product: ${products}">
+                    <td><a th:text="${#strings.abbreviate(product.id, 10)}" th:href="@{/show/} + ${product.id}"></a></td>
+                    <td th:text="${product.name}"></td>
+                    <td th:text="${#numbers.formatCurrency(product.price)}"></td>
+                    <td th:text="${#calendars.format(product.createdAt, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${product.category.name}"></td>
+                    <td><a th:href="@{/form-v2/} + ${product.id}">edit</a></td>
+                    <td><a th:href="@{/delete/} + ${product.id}" onclick="return confirm('¿Are you sure to delete this element?');">delete</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

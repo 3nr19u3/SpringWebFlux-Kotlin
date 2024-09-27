@@ -4,3 +4,11 @@ spring:
       data:
           mongodb:
                   uri: mongodb://localhost:27017/test
+      thymeleaf:
+        reactive:
+          max-chunk-size: 1024
+          chunked-mode-view-names: list-chunked
+
+config:
+      uploads:
+          path: "C://SpringWebFlux//uploads//"
