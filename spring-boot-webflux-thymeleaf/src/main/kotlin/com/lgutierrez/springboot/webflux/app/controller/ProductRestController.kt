@@ -34,5 +34,4 @@ class ProductRestController {
                                          .doOnNext { p -> logger.info(p.name) }
     }
 
-
 }

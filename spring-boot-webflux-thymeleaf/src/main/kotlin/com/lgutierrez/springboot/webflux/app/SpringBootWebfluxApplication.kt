@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import reactor.core.publisher.Flux
 
 @SpringBootApplication
-class SpringBootWebfluxApplication : CommandLineRunner {
+class SpringBootWebfluxApplication: CommandLineRunner {
 
     @Autowired
     private lateinit var reactiveMongoTemplate: ReactiveMongoTemplate
