@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 data class Category (
     @Id
     @NotEmpty
-    val id: String? = null,
+    var id: String? = null,
     @NotNull
     val name: String = ""
 ){

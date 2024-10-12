@@ -29,4 +29,6 @@ data class Product (
 
     constructor(name: String, price: Double) : this(name = name, price = price, createdAt = Date(), category = Category())
 
+    constructor(name: String, price: Double, category: Category) : this(name = name, price = price, createdAt = Date(), category = category)
+
 }
