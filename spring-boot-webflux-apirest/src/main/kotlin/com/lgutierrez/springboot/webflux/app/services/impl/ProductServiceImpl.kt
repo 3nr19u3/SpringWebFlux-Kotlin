@@ -41,4 +41,8 @@ class ProductServiceImpl : ProductService {
         //repeats the given number of times
         return findAllWithUppercaseNames().repeat(num)
     }
+
+    override fun findByName(name: String): Mono<Product> {
+        return productRepository.findByName(name)
+    }
 }
