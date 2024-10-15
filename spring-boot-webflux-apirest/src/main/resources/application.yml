@@ -8,3 +8,5 @@ spring:
 config:
   uploads:
     path: "C://SpringWebFlux//uploads//"
+  base:
+    uri: "/api/v2/products"

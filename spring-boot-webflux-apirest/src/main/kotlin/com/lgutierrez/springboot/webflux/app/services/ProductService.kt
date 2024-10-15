@@ -17,4 +17,5 @@ interface ProductService {
 
     fun findAllWithUppercaseNamesRepeat(num: Long): Flux<Product>
 
+    fun findByName(name: String): Mono<Product>
 }

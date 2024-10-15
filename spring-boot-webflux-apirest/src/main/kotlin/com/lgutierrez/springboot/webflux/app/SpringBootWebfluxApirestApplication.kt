@@ -56,7 +56,8 @@ class SpringBootWebfluxApirestApplication: CommandLineRunner{
 				)
 					.flatMap { product -> productService.save(product) }
 
-			).subscribe { product -> logger.info("Product inserted -> $product") }	}
+			).subscribe { product -> logger.info("Product inserted -> $product") }
+	}
 
 }
 

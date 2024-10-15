@@ -1,6 +1,7 @@
 package com.lgutierrez.springboot.webflux.app.services.impl
 
 import com.lgutierrez.springboot.webflux.app.models.documents.Category
+import com.lgutierrez.springboot.webflux.app.models.documents.Product
 import com.lgutierrez.springboot.webflux.app.models.repository.CategoryRepository
 import com.lgutierrez.springboot.webflux.app.services.CategoryService
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,5 +25,9 @@ class CategoryServiceImpl: CategoryService {
 
     override fun save(category: Category): Mono<Category> {
         return categoryRepository.save(category)
+    }
+
+    override fun findByName(name: String): Mono<Category> {
+        return categoryRepository.findByName(name)
     }
 }
