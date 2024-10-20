@@ -20,13 +20,13 @@ data class Product (
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     val createdAt: Date? = Date(), //from java
     @Valid
-    var category: Category,
+    var category: com.lgutierrez.springboot.webflux.app.models.documents.Category,
 
     var photo: String? = null
 ){
 
-    constructor() : this(name = null, price = null, createdAt = Date(), category = Category())
+    constructor() : this(name = null, price = null, createdAt = Date(), category = com.lgutierrez.springboot.webflux.app.models.documents.Category())
 
-    constructor(name: String, price: Double) : this(name = name, price = price, createdAt = Date(), category = Category())
+    constructor(name: String, price: Double) : this(name = name, price = price, createdAt = Date(), category = com.lgutierrez.springboot.webflux.app.models.documents.Category())
 
 }
