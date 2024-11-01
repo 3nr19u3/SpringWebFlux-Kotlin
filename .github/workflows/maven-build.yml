@@ -13,14 +13,14 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mongodb:
-        image: mongo
+      mongo:
+        image: mongo:5.0
         env:
           MONGO_INITDB_ROOT_USERNAME: test
           MONGO_INITDB_ROOT_PASSWORD: password
           MONGO_INITDB_DATABASE: test
         options: >-
-          --health-cmd mongo
+          --health-cmd "mongod --eval 'db.runCommand({ ping: 1 })'"
           --health-interval 10s
           --health-timeout 30s
           --health-retries 5
@@ -45,7 +45,12 @@ jobs:
           java-version: '17'  # Especifica la versión de Java que usas
           distribution: 'temurin'
 
+      - name: Show Mongo logs
+        run: docker logs $(docker ps -q --filter ancestor=mongo:5.0) || echo "No Mongo logs available."
+
       - name: Build and test
+        env:
+          SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/test
         run: |
           cd ${{ matrix.module }}
           mvn clean install
