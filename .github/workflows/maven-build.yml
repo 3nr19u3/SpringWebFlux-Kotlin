@@ -1,4 +1,4 @@
-name: CI
+name: CI main
 
 on:
   push:
@@ -13,23 +13,23 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mongo:
-        image: mongo:5.0
+      mongodb:
+        image: mongo
         env:
           MONGO_INITDB_ROOT_USERNAME: test
           MONGO_INITDB_ROOT_PASSWORD: password
           MONGO_INITDB_DATABASE: test
         options: >-
-          --health-cmd "mongod --eval 'db.runCommand({ ping: 1 })'"
+          --health-cmd mongo
           --health-interval 10s
-          --health-timeout 30s
+          --health-timeout 5s
           --health-retries 5
         ports:
           - 27017:27017
 
     strategy:
       matrix:
-        module: [spring-boot-webflux-apirest, spring-boot-webflux-client, spring-boot-webflux-eureka-server, spring-boot-webflux-thymeleaf]  # Nombres de tus módulos
+        module: [spring-boot-webflux-apirest, spring-boot-webflux-client, spring-boot-webflux-eureka-server, spring-boot-webflux-thymeleaf]  # Modules names
 
     steps:
       - name: Cleanup old containers
@@ -42,30 +42,25 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'  # Especifica la versión de Java que usas
+          java-version: '17'  # Java version
           distribution: 'temurin'
 
-      - name: Show Mongo logs
-        run: docker logs $(docker ps -q --filter ancestor=mongo:5.0) || echo "No Mongo logs available."
-
-      - name: Build and test
-        env:
-          SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/test
+      - name: Build and test # Compilation each module
         run: |
           cd ${{ matrix.module }}
-          mvn clean install
+          mvn clean install 
 
       - name: Upload Test Results
-        if: success()  # Solo si la compilación es exitosa
+        if: success()  # Only if the compilation process is successfully
         uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ matrix.module }}
-          path: ${{ matrix.module }}/target/surefire-reports  # Ruta a los reportes de pruebas
+          path: ${{ matrix.module }}/target/surefire-reports  # Path to test reports
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/main' && success()  # Solo si el job build es exitoso y estamos en main
+    if: github.ref == 'refs/heads/main' && success()  # Only if the job build process was successfully and we are on main branch
 
     steps:
       - name: Checkout code
@@ -74,7 +69,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'  # Especifica la versión de Java que usas
+          java-version: '17'  # Java version
           distribution: 'temurin'
 
       - name: Deploy to production
