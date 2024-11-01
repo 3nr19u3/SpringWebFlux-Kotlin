@@ -17,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           java-version: '17'  # Especifica la versión de Java que usas
           distribution: 'temurin'
@@ -32,7 +32,7 @@ jobs:
 
       - name: Upload Test Results
         if: success()  # Solo si la compilación es exitosa
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ matrix.module }}
           path: ${{ matrix.module }}/target/surefire-reports  # Ruta a los reportes de pruebas
@@ -44,10 +44,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up JDK
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           java-version: '17'  # Especifica la versión de Java que usas
           distribution: 'temurin'
