@@ -14,13 +14,13 @@ jobs:
 
     services:
       mongo:
-        image: mongo
+        image: mongo:latest
         env:
           MONGO_INITDB_ROOT_USERNAME: test
           MONGO_INITDB_ROOT_PASSWORD: password
           MONGO_INITDB_DATABASE: test
         options: >-
-          --health-cmd "echo 'db.runCommand("ping").ok' | mongosh --quiet"
+          --health-cmd "mongod --eval 'db.runCommand({ ping: 1 })'"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -53,7 +53,7 @@ jobs:
 
       - name: Build and test spring-boot-webflux-apirest
         run: |
-          docker run --name mongo -d -p 27017:27017 mongo:5.0
+          docker run --name mongo -d -p 27017:27017 mongo:latest
           sleep 10
           mvn -f spring-boot-webflux-apirest/pom.xml clean install
           docker stop mongo
