@@ -13,14 +13,14 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mongodb:
+      mongo:
         image: mongo
         env:
           MONGO_INITDB_ROOT_USERNAME: test
           MONGO_INITDB_ROOT_PASSWORD: password
           MONGO_INITDB_DATABASE: test
         options: >-
-          --health-cmd mongo
+          --health-cmd "echo 'db.runCommand("ping").ok' | mongosh --quiet"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -32,10 +32,6 @@ jobs:
         module: [spring-boot-webflux-apirest, spring-boot-webflux-client, spring-boot-webflux-eureka-server, spring-boot-webflux-thymeleaf]  # Modules names
 
     steps:
-      - name: Cleanup old containers
-        run: |
-          docker rm -f $(docker ps -aq) || true
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -45,10 +41,23 @@ jobs:
           java-version: '17'  # Java version
           distribution: 'temurin'
 
-      - name: Build and test # Compilation each module
+      # Build and test each module
+      - name: Build and test spring-boot-webflux-thymeleaf
+        run: mvn -f spring-boot-webflux-thymeleaf/pom.xml clean install
+
+      - name: Build and test spring-boot-webflux-client
+        run: mvn -f spring-boot-webflux-client/pom.xml clean install
+
+      - name: Build and test spring-boot-webflux-eureka-server
+        run: mvn -f spring-boot-webflux-eureka-server/pom.xml clean install
+
+      - name: Build and test spring-boot-webflux-apirest
         run: |
-          cd ${{ matrix.module }}
-          mvn clean install 
+          docker run --name mongo -d -p 27017:27017 mongo:5.0
+          sleep 10
+          mvn -f spring-boot-webflux-apirest/pom.xml clean install
+          docker stop mongo
+          docker rm mongo
 
       - name: Upload Test Results
         if: success()  # Only if the compilation process is successfully
