@@ -29,7 +29,7 @@ jobs:
 
     strategy:
       matrix:
-        module: [spring-boot-webflux-apirest, spring-boot-webflux-client, spring-boot-webflux-eureka-server, spring-boot-webflux-thymeleaf]  # Modules names
+        module: [spring-boot-webflux-thymeleaf, spring-boot-webflux-client, spring-boot-webflux-eureka-server, spring-boot-webflux-apirest ]  # Modules names
 
     steps:
       - name: Checkout code
