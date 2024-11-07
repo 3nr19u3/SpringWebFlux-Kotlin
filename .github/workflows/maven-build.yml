@@ -54,7 +54,7 @@ jobs:
       - name: Build and test spring-boot-webflux-apirest
         run: |
           docker run --name mongo -d -p 27017:27017 mongo:latest
-          sleep 10
+          sleep 20
           mvn -f spring-boot-webflux-apirest/pom.xml clean install
           docker stop mongo
           docker rm mongo
