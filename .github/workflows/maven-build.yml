@@ -14,8 +14,8 @@ jobs:
         module: [spring-boot-webflux-thymeleaf, spring-boot-webflux-client, spring-boot-webflux-eureka-server, spring-boot-webflux-apirest ]  # Modules names
 
     services:
-      mongo:
-        image: mongo:latest
+      mongodb:
+        image: mongo:6.0
         env:
           MONGO_INITDB_ROOT_USERNAME: test
           MONGO_INITDB_ROOT_PASSWORD: password
