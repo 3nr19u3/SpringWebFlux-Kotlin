@@ -1,4 +1,4 @@
-name: CI to main (Skip tests)
+name: CI/CD Workflow for Integrating Changes to Main
 
 on:
   push:
@@ -6,30 +6,68 @@ on:
       - '*'  # Trigger on any branch
 
 jobs:
-  merge-to-main:
+  build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        module: [spring-boot-webflux-thymeleaf, spring-boot-webflux-client, spring-boot-webflux-eureka-server, spring-boot-webflux-apirest ]  # Modules names
+
+    services:
+      mongo:
+        image: mongo:latest
+        env:
+          MONGO_INITDB_ROOT_USERNAME: test
+          MONGO_INITDB_ROOT_PASSWORD: password
+          MONGO_INITDB_DATABASE: test
+        options: >-
+          --health-cmd "mongo --eval 'db.runCommand({ connectionStatus: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           java-version: '17'  # Java version
           distribution: 'temurin'
 
-      - name: Fetch the latest changes from main
-        run: git fetch origin main
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-      - name: Checkout to main
-        run: git checkout main
+      - name: Install dependencies and build the project
+        run: mvn clean install -DskipTests
 
-      - name: Merge the changes from the current branch into main
+      - name: Run all unit tests for all modules
+        run: mvn test
+
+      - name: Run MongoDB integration tests for module that requires MongoDB
+        run: mvn -pl module-with-mongo-tests test
+        env:
+          MONGODB_URI: mongodb://localhost:27017  # Asegúrate de que tu aplicación utilice esta variable para conectarse a MongoDB
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: target/test-classes
+
+      - name: Merge to main if tests passed
+        if: github.ref != 'refs/heads/main' && success()
         run: |
-          git merge ${{ github.head_ref }} --no-ff --no-edit
-
-      - name: Push the changes to main
-        run: |
+          git fetch origin main
+          git checkout main
+          git merge ${{ github.head_ref }}
           git push origin main
 
