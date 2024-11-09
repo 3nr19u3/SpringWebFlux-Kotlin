@@ -29,17 +29,16 @@ jobs:
         working-directory: ./spring-boot-webflux-eureka-server/
 
 
-  merge-to-main:
+  merge-branch:
     needs: build-and-test
     if: success() && github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@main
 
-      - name: Merge to main branch
-        run: |
-          git fetch origin main
-          git checkout main
-          git merge ${{ github.head_ref }} --no-ff --no-edit
-          git push origin main
+      - name: Merge staging -> main
+        uses: devmasx/merge-branch@1.4.0
+        with:
+          type: now
+          target_branch: main
+          github_token: ${{ secrets.TOKEN }}
