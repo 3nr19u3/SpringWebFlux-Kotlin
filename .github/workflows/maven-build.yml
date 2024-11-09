@@ -11,11 +11,14 @@ jobs:
 
     strategy:
       matrix:
-        module: [spring-boot-webflux-thymeleaf, spring-boot-webflux-client, spring-boot-webflux-eureka-server, spring-boot-webflux-apirest ]  # Modules names
+        module: [spring-boot-webflux-thymeleaf,
+                 spring-boot-webflux-client,
+                 spring-boot-webflux-eureka-server,
+                 spring-boot-webflux-apirest ]  # Modules names
 
     services:
       mongodb:
-        image: mongo:6.0
+        image: mongo
         env:
           MONGO_INITDB_ROOT_USERNAME: test
           MONGO_INITDB_ROOT_PASSWORD: password
