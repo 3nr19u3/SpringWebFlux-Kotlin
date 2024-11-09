@@ -39,7 +39,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Cache Maven dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -58,7 +58,7 @@ jobs:
           MONGODB_URI: mongodb://localhost:27017  # Asegúrate de que tu aplicación utilice esta variable para conectarse a MongoDB
 
       - name: Upload test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: target/test-classes
