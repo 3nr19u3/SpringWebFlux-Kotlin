@@ -12,6 +12,9 @@ jobs:
   build-and-test:
 
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mongodb-version: ['6.0', '7.0', '8.0']
 
     steps:
       - name: Check out the repository
@@ -24,9 +27,17 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-username: test
+          mongodb-password: password
+          mongodb-db: test
+
       - name: Build and test with Maven
         run: mvn --batch-mode package
-        working-directory: ./spring-boot-webflux-eureka-server/
+        working-directory: ./spring-boot-webflux-apirest/
 
 
   merge-branch:
