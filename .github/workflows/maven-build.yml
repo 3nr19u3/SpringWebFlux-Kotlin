@@ -34,10 +34,10 @@ jobs:
     if: success() && github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@master
 
       - name: Merge staging -> main
-        uses: devmasx/merge-branch@1.4.0
+        uses: devmasx/merge-branch@master
         with:
           type: now
           target_branch: main
