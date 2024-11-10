@@ -31,9 +31,6 @@ jobs:
         uses: supercharge/mongodb-github-action@1.11.0
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
-          mongodb-username: test
-          mongodb-password: password
-          mongodb-db: test
 
       - name: Build and test with Maven
         run: mvn --batch-mode package
