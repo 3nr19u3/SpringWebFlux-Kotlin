@@ -44,9 +44,11 @@ jobs:
 
       - name: Build module ${{ matrix.module }}
         run: mvn clean install -DskipTests -pl ${{ matrix.module }} -am
+        working-directory: ./${{ matrix.module }}/
 
       - name: Run tests for module ${{ matrix.module }}
         run: mvn test -pl ${{ matrix.module }}
+        working-directory: ./${{ matrix.module }}/
 
   merge-branch:
     needs: build-and-test
