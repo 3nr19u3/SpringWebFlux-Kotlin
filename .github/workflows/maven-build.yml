@@ -14,7 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        mongodb-version: ['6.0', '7.0', '8.0']
+        module: [ spring-boot-webflux-thymeleaf,
+                  spring-boot-webflux-client,
+                  spring-boot-webflux-eureka-server,
+                  spring-boot-webflux-apirest ]
+        #mongodb-version: ['6.0', '7.0', '8.0']
+
+      fail-fast: true
 
     steps:
       - name: Check out the repository
@@ -30,12 +36,17 @@ jobs:
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.11.0
         with:
-          mongodb-version: ${{ matrix.mongodb-version }}
+          mongodb-version: 6.0
 
-      - name: Build and test with Maven
-        run: mvn --batch-mode package
-        working-directory: ./spring-boot-webflux-apirest/
+      #- name: Build and test with Maven
+      #  run: mvn --batch-mode package
+      #  working-directory: ./spring-boot-webflux-apirest/
 
+      - name: Build module ${{ matrix.module }}
+        run: mvn clean install -DskipTests -pl ${{ matrix.module }} -am
+
+      - name: Run tests for module ${{ matrix.module }}
+        run: mvn test -pl ${{ matrix.module }}
 
   merge-branch:
     needs: build-and-test
