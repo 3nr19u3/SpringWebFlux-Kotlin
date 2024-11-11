@@ -1,6 +1,10 @@
 spring:
   application:
-    name: spring-boot-webflux-apirest
+    name: spring-boot-webflux-products
+
+server:
+  port: 8001
+
   data:
     mongodb:
       uri: mongodb://localhost:27017/test
