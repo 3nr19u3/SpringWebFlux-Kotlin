@@ -29,6 +29,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<kotlin.version>2.0.21</kotlin.version>
+		<spring-cloud.version>2023.0.3</spring-cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -94,7 +95,24 @@
 			<version>${kotlin.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!--This dependency do that this component behavior as a microservice client of eureka-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<sourceDirectory>src/main/kotlin</sourceDirectory>
